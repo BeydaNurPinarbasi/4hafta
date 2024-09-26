@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayıları Yazdır</title>
+    <style>
+        .red-bold {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h6>1’den 99’a kadar olan sayıları for döngüsü ile </h6>
+    <button id="siralaButton" onclick="sirala()">Sırala</button>
+    <button id="rastgeleButton" onclick="rastgeleSayi()">Rastgele Sayı Seç</button>
+    <div id="sayilar"></div>
+
+    <script>
+        // Sayıları tutacak olan div
+        const sayilarDiv = document.getElementById("sayilar");
+        // Sırala butonu
+        const siralaButton = document.getElementById("siralaButton");
+        // Rastgele Sayı Seç butonu
+        const rastgeleButton = document.getElementById("rastgeleButton");
+
+        // Sayıları ekrana yazdıran fonksiyon
+        function sayilariYazdir(sayilar) {
+            sayilarDiv.innerHTML = ""; // Önceki sayıları temizle
+            for (let i = 0; i < sayilar.length; i++) {
+                // Her bir sayıyı span içerisine yaz
+                let span = document.createElement("span");
+                span.textContent = sayilar[i];
+                sayilarDiv.appendChild(span);
+                sayilarDiv.appendChild(document.createTextNode(" ")); // Boşluk ekleyerek her sayıyı ayır
+                if ((i + 1) % 10 === 0) { // Her satırda 10 sayı olsun
+                    sayilarDiv.appendChild(document.createElement("br"));
+                }
+            }
+        }
+
+        // Sırala butonuna basıldığında çalışacak fonksiyon
+        function sirala() {
+            siralaButton.disabled = true; // Sırala butonunu pasif yap
+            rastgeleButton.disabled = false; // Rastgele Sayı Seç butonunu aktif yap
+            let sayilar = [];
+            for (let i = 1; i <= 99; i++) {
+                sayilar.push(i);
+            }
+            sayilariYazdir(sayilar);
+        }
+
+        // Rastgele Sayı Seç butonuna basıldığında çalışacak fonksiyon
+        function rastgeleSayi() {
+            let randomSayi = Math.floor(Math.random() * 99) + 1;
+            let span = document.createElement("span");
+            span.textContent = randomSayi;
+            span.classList.add("red-bold"); // Kırmızı ve bold stilini uygula
+            sayilarDiv.appendChild(span);
+            sayilarDiv.appendChild(document.createTextNode(" ")); // Boşluk ekle
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayfa Yönlendirme</title>
+    <style>
+        body {
+            background-color: rgb(250, 252, 255); /* Arka plan rengi mavi */
+            color: white; /* Metin rengi beyaz */
+        }
+
+        button {
+            background-color: rgb(162, 198, 240);
+            font-family:'Times New Roman', Times, serif;
+            font-size: medium;
+       
+            margin-top: 10%;
+            margin-left: 5%;
+
+
+        }
+    </style>
+</head>
+<body>
+    <button onclick="soru1aYonlendir()">Soru 1'e Yönlendir</button>
+    <button onclick="soru2yeYonlendir()">Soru 2'ye Yönlendir</button>
+
+    <script>
+        function soru1aYonlendir() {
+            window.location.href = "sayfa1.html";
+        }
+
+        function soru2yeYonlendir() {
+            window.location.href = "sayfa2.html";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayısal Loto Oyunu</title>
+    <style>
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+  
+
+    </style>
+</head>
+<body>
+    <h2>Sayısal Loto Oyunu</h2>
+    <p>Lütfen 1 ile 49 arasında farklı 6 sayı giriniz:</p>
+    <div id="tahminler">
+        <!-- Kullanıcıların tahminlerini gireceği input kutuları -->
+    </div>
+    <button id="tahminGirButton" onclick="tahminleriAl()">Tahmin Gir</button>
+    <button id="kurayiCekButton" onclick="kurayiCek()" disabled>Kurayı Çek</button>
+    <p id="hataMesaji" class="error-message"></p>
+    <h3>Bilinen Sayılar:</h3>
+    <label id="bilinenSayilar"></label>
+    <h3>Bilinen Sayı Adedi:</h3>
+    <label id="bilinenSayiAdedi">0</label>
+
+    <script>
+        // Kullanıcının girdiği tahminleri tutacak dizi
+        let tahminler = [];
+
+        // Tahmin kutularının oluşturulması
+        const tahminlerDiv = document.getElementById("tahminler");
+        for (let i = 0; i < 6; i++) {
+            let input = document.createElement("input");
+            input.type = "number";
+            input.min = 1;
+            input.max = 49;
+            input.addEventListener("blur", () => {
+                kontrolEt(input);
+            });
+            tahminlerDiv.appendChild(input);
+        }
+
+        // Tahmin gir butonuna tıklandığında çalışacak fonksiyon
+        function tahminleriAl() {
+            // Hata mesajını sıfırla
+            document.getElementById("hataMesaji").textContent = "";
+
+            // Tahminleri temizle
+            tahminler = [];
+
+            // Girilen tahminleri kontrol et
+            let hata = false;
+            let girilenTahminler = new Set();
+            let inputs = tahminlerDiv.getElementsByTagName("input");
+            for (let i = 0; i < inputs.length; i++) {
+                let tahmin = parseInt(inputs[i].value);
+                if (isNaN(tahmin) || tahmin < 1 || tahmin > 49) {
+                    document.getElementById("hataMesaji").textContent = "1-49 arasında bir sayı girmelisiniz.";
+                    hata = true;
+                    break;
+                }
+                if (girilenTahminler.has(tahmin)) {
+                    document.getElementById("hataMesaji").textContent = "Aynı tahmin bir kez girilebilir.";
+                    hata = true;
+                    break;
+                }
+                girilenTahminler.add(tahmin);
+                tahminler.push(tahmin);
+            }
+
+            // Eğer hata yoksa, Tahmin Gir butonunu pasif yap, Kurayı Çek butonunu aktif yap
+            if (!hata && tahminler.length === 6) {
+                document.getElementById("tahminGirButton").disabled = true;
+                document.getElementById("kurayiCekButton").disabled = false;
+            }
+        }
+
+        // Kurayı çek butonuna tıklandığında çalışacak fonksiyon
+        function kurayiCek() {
+            // Tahminlerin ve loto sayılarının sıralanması
+            tahminler.sort((a, b) => a - b);
+            let lotoSayilari = [];
+            while (lotoSayilari.length < 6) {
+                let randomSayi = Math.floor(Math.random() * 49) + 1;
+                if (!lotoSayilari.includes(randomSayi)) {
+                    lotoSayilari.push(randomSayi);
+                }
+            }
+            lotoSayilari.sort((a, b) => a - b);
+
+            // Bilinen sayıları ve bilinen sayı adedini hesapla
+            let bilinenSayilar = tahminler.filter(sayi => lotoSayilari.includes(sayi));
+            let bilinenSayiAdedi = bilinenSayilar.length;
+
+            // Bilinen sayıları ve bilinen sayı adedini ekrana yaz
+            document.getElementById("bilinenSayilar").textContent = bilinenSayilar.join(", ");
+            document.getElementById("bilinenSayiAdedi").textContent = bilinenSayiAdedi;
+        }
+
+        // Input alanının blur olayı gerçekleştiğinde çalışacak fonksiyon
+        function kontrolEt(input) {
+            let girilenTahmin = parseInt(input.value);
+            if (girilenTahmin < 1 || girilenTahmin > 49) {
+                document.getElementById("hataMesaji").textContent = "1-49 arasında bir sayı girmelisiniz.";
+                input.value = "";
+            } else {
+                let girilenTahminler = tahminlerDiv.getElementsByTagName("input");
+                let girilenTahminSet = new Set();
+                for (let i = 0; i < girilenTahminler.length; i++) {
+                    if (girilenTahminler[i] !== input) {
+                        let digerTahmin = parseInt(girilenTahminler[i].value);
+                        if (girilenTahminSet.has(digerTahmin)) {
+                            document.getElementById("hataMesaji").textContent = "Aynı tahmin bir kez girilebilir.";
+                            input.value = "";
+                            break;
+                        }
+                        girilenTahminSet.add(digerTahmin);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
